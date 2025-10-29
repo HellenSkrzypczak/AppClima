@@ -31,14 +31,21 @@
         }        
 
         function getCity() {
-            $('#btnSearchCity').on('click', () => {
+            $('#btnSearchCity').on('click', async () => {
                 const city = $('#inpCity').val();
                 console.log('Cidade buscada:', city);
 
-                const weatherCity = getWeatherData(city).json();
-                //const weatherCityString = toString(weatherCity);  
-                console.log("Ta string?", weatherCity)
-                setWeatherCity(weatherCity);    
+                const cityJSON = await getWeatherData(city);
+                console.log("Oque: ", cityJSON)
+
+                if(!cityJSON){
+                    //console.log("Oque é?", getWeatherData)
+                    //const cityJSON = getWeatherData;
+                }
+                
+                //const weatherCityString = JSON.stringify(weatherCity);  
+                //console.log("Ta string?", weatherCityString)
+                //setWeatherCity(weatherCity);    
             });
         }
 
@@ -50,8 +57,9 @@
                 if(!response.ok){
                     throw new Error(`Erro: ${response.status}`);
                 }
-                const result = await response.json();
-                console.log(result)
+                const cityJSON = await response.json();
+                console.log("response", cityJSON)
+                return cityJSON;
             }
             catch (error) {
                 console.error('Fetch error', error);
