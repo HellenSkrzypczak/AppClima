@@ -6,16 +6,18 @@
     <link rel="stylesheet" href="style.css">
     <!--<script src="scripty.js"></script> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel= "stylesheet" href= "https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css" >
     <title>Document</title>
 </head>
 <body>
-    <header>
-        <h2>Pesquisa de clima</h1>
-    </header>
-    <div class="cabecalhoPesquisa">
-        <label for="inpCidade">Informe a cidade: </label>
-        <input id="inpCity" type="text">
-        <button id="btnSearchCity">Buscar</button>
+    <div class="conteiner_principal">
+        <div class="titulo">
+            <h1>Buscador de Clima</h1>
+        </div>
+        <div class="cabecalhoPesquisa">
+            <input id="inpCity" class="inputCidade" placeholder="  Informe a cidade para consultar a previsão" type="text">
+            <button id="btnSearchCity" class="btnSearch"><i class="las la-search"></i></button>
+        </div>
     </div>
     <div class="dadosClima"></div>
 
@@ -23,21 +25,30 @@
         const key = 'a7cd969bd7729f2261012fb065211541';
 
         function setWeatherCity(city) {
+            cleanFields();
 
             const html = `
-                <h1>Cidade: ${city.name}</h1>
-                <div>
-                    <div id="icon"><img id="wicon" src="http://openweathermap.org/img/w/${city.weather[0].icon}.png" alt="Weather icon"></div>
-                    <p>Temperatura: ${Math.round(city.main.temp)}C°</p>
-                    <p>${city.weather[0].description}</p>
-                </div>
-                <div>
-                    <p>Temperatura máxima: ${Math.round(city.main.temp_max)}C°</p>
-                    <p>Temperatura miníma: ${Math.round(city.main.temp_min)}C°</p>
-                </div>
-                <div>
-                    <p>Humidade: ${city.main.humidity}%</p>
-                    <p>Vento: ${city.wind.speed}km/h</p>
+                <div class="alinhamentoContainers">
+                    <h2>${city.name}</h2>
+                    <div class="container_infos borderContainers">
+                        <div class="icon">
+                            <img id="wicon" class="imgClima" src="http://openweathermap.org/img/w/${city.weather[0].icon}.png" alt="Weather icon">
+                        </div>
+                        <div class="infos_temperatura">
+                            <p class="temp">${Math.round(city.main.temp)}C°</p>
+                            <p class="descri">${city.weather[0].description}</p>
+                        </div>
+                    </div>
+                    <div class="container_detalhes">
+                        <div class="borderContainers">
+                            <p>Temperatura máxima: ${Math.round(city.main.temp_max)}C°</p>
+                            <p>Temperatura miníma: ${Math.round(city.main.temp_min)}C°</p>
+                        </div>
+                        <div class="borderContainers">
+                            <p>Humidade: ${city.main.humidity}%</p>
+                            <p>Vento: ${city.wind.speed}km/h</p>
+                        </div>
+                    </div>
                 </div>
             `
             const div = $('.dadosClima');
@@ -47,10 +58,9 @@
         function getCity() {
             $('#btnSearchCity').on('click', async () => {
                 const city = $('#inpCity').val();
-                console.log('Cidade buscada:', city);
 
                 const cityJSON = await getWeatherData(city);
-                console.log("Oque: ", cityJSON)
+
                 setWeatherCity(cityJSON);   
             });
         }
@@ -70,6 +80,12 @@
                 console.error('Fetch error', error);
             }
         }
+
+        function cleanFields() {
+            $('.dadosClima').empty();
+            $('#inpCity').val('');
+        }
+
         getCity()
     </script>
 </body>
